@@ -17,7 +17,6 @@ public class ReplacewithSqureBracket {
 	public static void replaceString() {
 
 		String address = "1.1";
-		String newAddress;
 		String arr[] = address.split("");
 		String newArr[] = new String[arr.length + 6];
 

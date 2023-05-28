@@ -29,8 +29,6 @@ public class SelectionSort {
 
 	public void selectionSort(int nums[]) {
 
-		int temp = 0;
-
 		for (int i = 0; i < nums.length; i++) {
 
 			int minloc = i;

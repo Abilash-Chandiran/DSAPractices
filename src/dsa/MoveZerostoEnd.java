@@ -6,10 +6,11 @@ public class MoveZerostoEnd {
 
 		int nums[] = { 0, 1, 0, 3, 12 };
 
-		moveZeros(nums);
+		for(int n:moveZeros(nums))
+			System.out.print(n+",");
 	}
 
-	public static void moveZeros(int nums[]) {
+	public static int[] moveZeros(int nums[]) {
 
 		int newNums[] = new int[nums.length];
 		int pos = 0;
@@ -21,8 +22,6 @@ public class MoveZerostoEnd {
 			}
 		}
 
-		for (int nm : newNums)
-			System.out.println(nm);
-
+		return newNums;
 	}
 }

@@ -6,8 +6,6 @@ public class MergeArraystoSorted {
 
 	/*
 	 * output - [1,2,3,5,7,8,9]
-	 * 
-	 * 
 	 */
 
 	@Test

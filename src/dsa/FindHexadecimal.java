@@ -1,6 +1,4 @@
 package dsa;
-import java.util.HashMap;
-import java.util.Map;
 
 public class FindHexadecimal {
 

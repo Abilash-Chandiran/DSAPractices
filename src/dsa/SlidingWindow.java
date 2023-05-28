@@ -18,11 +18,14 @@ public class SlidingWindow {
 			sum = sum + nums[i];
 		}
 		int sumMax = sum;
+		int windowSize = 0;
 		for (int i = 1; i < nums.length - k; i++) {
 			sumMax = sumMax - nums[i - 1] + nums[i + k - 1];
 			if (sumMax > sum)
 				sum = sumMax;
+			windowSize++;
 		}
 		System.out.println(sumMax);
+		System.out.println(windowSize);
 	}
 }
