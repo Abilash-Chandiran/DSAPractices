@@ -3,11 +3,11 @@ package selenium;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -16,6 +16,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.WheelInput;
 
 public class JiraBugsValidation {
 
@@ -48,60 +50,81 @@ public class JiraBugsValidation {
 		driver.findElement(By.xpath("//span[@role ='img' and @aria-label='Clear']")).click();
 		driver.findElement(By.name("search")).sendKeys("SDETTeamThreePractice");
 		driver.findElement(By.xpath("//span[text() ='SDETTeamThreePractice']")).click();
+		String parent = driver.getWindowHandle();
 		Thread.sleep(3000);
+
+		/*
+		 * List<WebElement> webElementsList2 =
+		 * driver.findElements(By.xpath("//span[contains(@class,'slp')]"));
+		 * List<WebElement> webElementsList2 =
+		 * driver.findElements(By.xpath("//span[contains(@class,'sc-15')]"));
+		 * JavascriptExecutor js = (JavascriptExecutor) driver;
+		 */
+
 		List<WebElement> webElementsList = driver.findElements(By.xpath("//span[contains(@class,'slp')]"));
 		List<String> bugs = new ArrayList<String>();
+		String toDolist_Count = driver.findElement(By.xpath("//div[contains(@class,'sc-12d')]")).getText().replace("\n",
+				"");
+		int toDo_Count = Integer.parseInt(toDolist_Count);
+		int maxCount = 0;
+		for (WebElement a : driver.findElements(By.xpath("//div[contains(@class,'sc-12d')]"))) {
 
-		for (WebElement bug : webElementsList)
-			bugs.add(bug.getText());
-		String parent = driver.getWindowHandle();
-		int initialBugsCount = bugs.size();
-		System.out.println("Initial bugs count - " + initialBugsCount);
+			String bugsCount = a.getText().replace("\n", "");
+			int count = Integer.parseInt(bugsCount);
+			maxCount = Math.max(count, toDo_Count);
+		}
+		Set<String> hs = new HashSet<String>();
 
-		// Switch to new Tab
+		while (maxCount > 0) {
+			Actions action = new Actions(driver);
+			WebElement toDo = driver.findElement(By.xpath("//div[text()='To Do']"));
+			action.moveToElement(toDo).perform();
+			Thread.sleep(700);
+			webElementsList = driver.findElements(By.xpath("//span[contains(@class,'slp')]"));
+			for (WebElement elem : webElementsList) {
+				bugs.add(elem.getText());
+			}
+			WheelInput.ScrollOrigin scrollOrigin = WheelInput.ScrollOrigin.fromElement(toDo);
+			action.scrollFromOrigin(scrollOrigin, 0, 350).perform();
+			Thread.sleep(1200);
+			maxCount = maxCount - 5;
+		}
+
 		driver.switchTo().newWindow(WindowType.TAB);
 		driver.navigate().to("https://sivasdetteam3.atlassian.net/jira/your-work");
-		Thread.sleep(5000);
+		Thread.sleep(3000);
 
 		driver.findElement(By.xpath("//span[text()='Create']")).click();
 		driver.findElement(By.xpath("(//span[@role='img' and @aria-label='open'])[2]")).click();
-		Thread.sleep(2000);
-		Robot robot = new Robot();
-		robot.keyPress(KeyEvent.VK_DOWN);
-		robot.keyRelease(KeyEvent.VK_DOWN);
 		Thread.sleep(1000);
-		robot.keyPress(KeyEvent.VK_ENTER);
-		robot.keyRelease(KeyEvent.VK_ENTER);
+		driver.findElement(By.xpath("//div[text()='Bug']")).click();
 
 		driver.findElement(By.id("summary-field")).sendKeys("Issue - 001");
 		driver.findElement(By.xpath("//span[text()='Assign to me']")).click();
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,350)", "");
-		Thread.sleep(1000);
-		driver.findElement(By.xpath("(//span[@role='img' and @aria-label='open'])[2]")).click();
-		Thread.sleep(2000);
-		robot.keyPress(KeyEvent.VK_DOWN);
-		robot.keyRelease(KeyEvent.VK_DOWN);
-		Thread.sleep(1000);
-		robot.keyPress(KeyEvent.VK_ENTER);
-		robot.keyRelease(KeyEvent.VK_ENTER);
+		WebElement sprint = driver.findElement(By.xpath("(//span[@role='img' and @aria-label='open'])[4]"));
+		js.executeScript("arguments[0].scrollIntoView();", sprint);
+		Thread.sleep(500);
+		sprint.click();
+		driver.findElement(By.xpath("//div[text()='SDET Sprint 1']//following-sibling::div[text()='SDET board']"))
+				.click();
+		Thread.sleep(300);
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Thread.sleep(3000);
-
-		String child = driver.getWindowHandle();
 		Thread.sleep(1000);
-
+		String child = driver.getWindowHandle();
 		if (!parent.equals(child))
 			driver.close();
+		Thread.sleep(500);
 		driver.switchTo().window(parent);
-		Thread.sleep(3000);
-		// driver.navigate().refresh();
+		driver.navigate().refresh();
 		driver.get(driver.getCurrentUrl());
-		Thread.sleep(5000);
+		Thread.sleep(10000);
 		List<String> bugs_current = new ArrayList<String>();
 
 		for (WebElement bug : driver.findElements(By.xpath("//span[contains(@class,'slp')]")))
 			bugs_current.add(bug.getText());
+
+		System.out.println(bugs_current.size());
 
 		driver.quit();
 	}

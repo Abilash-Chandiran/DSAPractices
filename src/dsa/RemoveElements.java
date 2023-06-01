@@ -1,5 +1,7 @@
 package dsa;
 
+import java.util.Arrays;
+
 public class RemoveElements {
 
 	public static void main(String[] args) {
@@ -11,15 +13,14 @@ public class RemoveElements {
 
 	public static int removeElems(int nums[], int val) {
 
-		int k = 0;
+		int count = 0;
 
 		for (int i = 0; i < nums.length; i++) {
 			if (nums[i] != val)
-				k++;
-
+				count++;
 		}
 
-		return k;
+		return count;
 
 	}
 
