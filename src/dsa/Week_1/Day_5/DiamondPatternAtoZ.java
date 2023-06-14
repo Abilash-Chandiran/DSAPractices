@@ -1,4 +1,4 @@
-package dsa;
+package dsa.Week_1.Day_5;
 import java.util.Scanner;
 
 public class DiamondPatternAtoZ {

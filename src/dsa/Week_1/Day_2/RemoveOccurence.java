@@ -1,4 +1,4 @@
-package dsa;
+package dsa.Week_1.Day_2;
 import java.util.Arrays;
 
 public class RemoveOccurence {

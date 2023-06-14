@@ -1,4 +1,4 @@
-package dsa;
+package dsa.Week_1.Day_4;
 
 public class SandglassStarPattern {
 

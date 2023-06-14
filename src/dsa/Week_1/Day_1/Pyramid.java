@@ -1,4 +1,4 @@
-package dsa;
+package dsa.Week_1.Day_1;
 
 public class Pyramid {
 
