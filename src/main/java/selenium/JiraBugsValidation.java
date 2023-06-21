@@ -18,38 +18,50 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.WheelInput;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class JiraBugsValidation {
 
-	private static String url = "https://sivasdetteam3.atlassian.net/jira/software/projects/SDET/boards/1/backlog?atlOrigin=eyJwIjoiYWRtaW4iLCJpIjoiM2JiY2FjMDRiZWE2NGM2NmE4ZTU4N2NlMjczYjU5MTIifQ%3D%3D&cloudId=cf274827-647b-4e35-959d-039794db9841";
-	private static String email = "abilashmchand@gmail.com";
-	private static String password = "Sdet@123";
+	private static String url = "https://abilashmchand05.atlassian.net/jira/software/projects/SDET/boards/1";
+	private static String email = "abilashmchand05@gmail.com";
+	private static String password = "Klopmnb!@#0192";
 	ChromeDriver driver;
 
 	@Test
 	public void test() throws InterruptedException, AWTException {
-		ChromeOptions options = new ChromeOptions();
-		// options.addArguments("--incognito");
-		ChromeDriver driver = new ChromeDriver();
+		ChromeOptions option = new ChromeOptions();
+		option.addArguments("incognito");
+		ChromeDriver driver = new ChromeDriver(option);
 
 		driver.get(url);
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		driver.manage().window().maximize();
 		driver.findElement(By.id("username")).sendKeys(email);
-		driver.findElement(By.id("login-submit")).click();
-		driver.findElement(By.id("password")).sendKeys(password);
-		driver.findElement(By.id("login-submit")).click();
+		Thread.sleep(2000);
+		WebElement submit = driver.findElement(By.xpath("//button[contains(@id,'submit')]"));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.elementToBeClickable(submit));
+		submit.click();
+		Thread.sleep(2000);
+		submit = driver.findElement(By.xpath("//button[contains(@id,'submit')]"));
+		submit.click();
+		driver.findElement(By.xpath("//span[text()='Next']")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//input[@type='password']")).sendKeys(password);
+		driver.findElement(By.xpath("//span[text()='Next']")).click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button/span[text()='Projects']")));
+		assertEquals("Projects", driver.findElement(By.xpath("//button/span[text()='Projects']")).getText());
 		Thread.sleep(2000);
 		driver.findElement(By.xpath("//span[text()='Projects']")).click();
 		driver.findElement(By.xpath("//span[text()='View all projects']")).click();
 		driver.findElement(By.name("search")).sendKeys("Prime");
 		String warningMsg = driver.findElement(By.xpath("//h4[text()='No projects were found that match your search']"))
 				.getText();
-
 		assertEquals("No projects were found that match your search", warningMsg);
 		driver.findElement(By.xpath("//span[@role ='img' and @aria-label='Clear']")).click();
-		driver.findElement(By.name("search")).sendKeys("SDETTeamThreePractice");
-		driver.findElement(By.xpath("//span[text() ='SDETTeamThreePractice']")).click();
+		driver.findElement(By.name("search")).sendKeys("SDETSeleniumLearnings");
+		driver.findElement(By.xpath("//span[text() ='SDETSeleniumLearnings']")).click();
 		String parent = driver.getWindowHandle();
 		Thread.sleep(3000);
 
@@ -61,13 +73,13 @@ public class JiraBugsValidation {
 		 * JavascriptExecutor js = (JavascriptExecutor) driver;
 		 */
 
-		List<WebElement> webElementsList = driver.findElements(By.xpath("//span[contains(@class,'slp')]"));
+		List<WebElement> webElementsList = driver.findElements(By.xpath("//*[contains(@class,'ghx-summary')]"));
 		List<String> bugs = new ArrayList<String>();
-		String toDolist_Count = driver.findElement(By.xpath("//div[contains(@class,'sc-12d')]")).getText().replace("\n",
+		String toDolist_Count = driver.findElement(By.xpath("//*[text()='To Do']/following-sibling::div[@class='ghx-qty']")).getText().replace("\n",
 				"");
 		int toDo_Count = Integer.parseInt(toDolist_Count);
 		int maxCount = 0;
-		for (WebElement a : driver.findElements(By.xpath("//div[contains(@class,'sc-12d')]"))) {
+		for (WebElement a : driver.findElements(By.xpath("//div[contains(@class,'ghx-qty')]"))) {
 
 			String bugsCount = a.getText().replace("\n", "");
 			int count = Integer.parseInt(bugsCount);
@@ -77,10 +89,10 @@ public class JiraBugsValidation {
 
 		while (maxCount > 0) {
 			Actions action = new Actions(driver);
-			WebElement toDo = driver.findElement(By.xpath("//div[text()='To Do']"));
+			WebElement toDo = driver.findElement(By.xpath("//*[text()='To Do']"));
 			action.moveToElement(toDo).perform();
 			Thread.sleep(700);
-			webElementsList = driver.findElements(By.xpath("//span[contains(@class,'slp')]"));
+			webElementsList = driver.findElements(By.xpath("//*[contains(@class,'ghx-summary')]"));
 			for (WebElement elem : webElementsList) {
 				bugs.add(elem.getText());
 			}
@@ -92,22 +104,23 @@ public class JiraBugsValidation {
 
 		driver.switchTo().newWindow(WindowType.TAB);
 		driver.navigate().to("https://sivasdetteam3.atlassian.net/jira/your-work");
-		Thread.sleep(3000);
-
+		wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Create']")));
 		driver.findElement(By.xpath("//span[text()='Create']")).click();
 		driver.findElement(By.xpath("(//span[@role='img' and @aria-label='open'])[2]")).click();
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//div[text()='Bug']")).click();
 
-		driver.findElement(By.id("summary-field")).sendKeys("Issue - 001");
+		driver.findElement(By.id("summary-field")).sendKeys("Test Issue 01");
 		driver.findElement(By.xpath("//span[text()='Assign to me']")).click();
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		WebElement sprint = driver.findElement(By.xpath("(//span[@role='img' and @aria-label='open'])[4]"));
 		js.executeScript("arguments[0].scrollIntoView();", sprint);
 		Thread.sleep(500);
-		sprint.click();
-		driver.findElement(By.xpath("//div[text()='SDET Sprint 1']//following-sibling::div[text()='SDET board']"))
-				.click();
+		// sprint.click();
+		// driver.findElement(By.xpath("//div[text()='SDET Sprint
+		// 1']//following-sibling::div[text()='SDET board']"))
+		// .click();
 		Thread.sleep(300);
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
 		Thread.sleep(1000);
