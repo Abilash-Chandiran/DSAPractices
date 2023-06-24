@@ -21,14 +21,11 @@ public class Permutation {
 	}
 
 	public boolean checkChars(String s1, String s2) {
-
+		
 		String s3 = "";
-		for (char ch : s1.toCharArray()) {
+		for (char ch : s1.toCharArray())
 			s3 = ch + s3;
-		}
-
 		return s2.contains(s3);
-
 	}
 
 }
