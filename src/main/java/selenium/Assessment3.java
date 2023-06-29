@@ -73,7 +73,13 @@ public class Assessment3 {
 		Thread.sleep(2000);
 		WebElement slider = driver. findElement(By. xpath("(//div[@class='price_slider'])[1]"));
 		Actions action = new Actions(driver);
-		action. dragAndDropBy(slider, 25, slider.getLocation().getY()). perform();
+		
+		System.out.println("Actual X - "+driver.findElement(By.xpath("(//div[@class=\"rc-slider-handle rc-slider-handle-1\"])[1]")).getLocation().getX());
+		System.out.println("Actual Y - "+driver.findElement(By.xpath("(//div[@class=\"rc-slider-handle rc-slider-handle-1\"])[1]")).getLocation().getY());
+		
+		action. dragAndDropBy(slider, 20, 345). perform();
+		
+		//action. dragAndDropBy(slider, 18, slider.getLocation().getY()). perform();
 		
 		List<WebElement> prices = driver.findElements(By.xpath("//*[contains(@data-testid,'discounted-price')]"));
 		List<Integer> pricelist = new ArrayList<>();

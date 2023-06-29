@@ -11,7 +11,7 @@ public class DistinctNumbers {
 					System.out.print(arr[i] + " , ");
 				}
 			}
-			System.out.println(arr[arr.length-1]);
+			System.out.println(arr[arr.length - 1]);
 		} else {
 			return;
 		}
