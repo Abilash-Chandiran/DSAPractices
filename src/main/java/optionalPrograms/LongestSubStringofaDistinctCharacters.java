@@ -6,7 +6,7 @@ import java.util.Set;
 public class LongestSubStringofaDistinctCharacters {
 
 	public static void main(String[] args) {
-		String str = "Input:  findlongestsubstring";
+		String str = "findlongestsubstring";
 		System.out.println(longestSubString(str));
 	}
 
