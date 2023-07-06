@@ -1,4 +1,4 @@
-package main.java.selenium;
+package main.java.mandatoryHomeWork.selenium;
 
 import java.io.File;
 import java.io.IOException;

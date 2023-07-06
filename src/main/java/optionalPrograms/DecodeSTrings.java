@@ -1,0 +1,84 @@
+package main.java.optionalPrograms;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+import org.junit.Test;
+
+import junit.framework.Assert;
+
+public class DecodeSTrings {
+
+	@Test
+	public void testData01(){            // Positive
+		String input = "2[abc3[ab]]";
+		Assert.assertTrue(decodeString(input).equals("abcababababcababab"));
+	}
+
+
+	//@Test
+	public void testData02(){			 // Negative
+		String input = "a[abc[az]]";
+		Assert.assertTrue(decodeString(input).equals("aabcaz"));
+	}
+
+	//@Test
+	public void testData03(){			 // Edge
+		String input = "2[abc2[ab2[c]]]";
+		Assert.assertTrue(decodeString(input).equals("abcabccabccabcabccabcc"));
+	}
+	
+	/*  2[abc3[ab]]
+	 * Create a Stack 
+	   Iterate the input and add the each char to Stack 
+ 		  If ] is found , add the items till [ is found to array List
+ 		  Pop '[' brace
+ 		  Initialize K as 1 
+  		  if is a digit iterate till [ or if char present or till stack is not empty
+          update K value
+          Push the items to stack k times
+		Create StringBuilder and pop the items from stack and return
+		Time : O(m*n) m - multiple digits and n - brackets
+	    Space : O(m*n) m - multiple digits and n - brackets
+	 */
+	private String decodeString(String s) {
+		Stack<Character> stack = new Stack<>();//2[abc3[ab]]
+		System.out.println("Input : 2[abc3[ab]]");
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i) != ']') {
+				stack.push(s.charAt(i));
+				System.out.println("Stack in 1st if condition : "+stack.toString());
+			}
+			else {
+				List<Character> list = new ArrayList<>();
+				while (stack.peek() != '[') {
+					list.add(stack.pop());
+					System.out.println("list in 1st while : "+list);
+				}
+				stack.pop();
+				int times = 1;
+				if (Character.isDigit(stack.peek())) {
+					StringBuilder valueOfK = new StringBuilder();
+					while (!stack.empty() && stack.peek() != '[' && Character.isDigit(stack.peek())) {
+						valueOfK.insert(0, stack.pop());
+					}
+					times = Integer.valueOf(valueOfK.toString());
+					System.out.println("times : "+times);
+				}
+				while (times > 0) {
+					for (int j = list.size() - 1; j >= 0; j--) {
+						stack.push(list.get(j));
+						System.out.println("Stack in 2nd for loop: "+stack.toString());
+					}
+					times--;
+				}
+			}
+		}
+		StringBuilder sb = new StringBuilder();
+		for (Character c : stack)
+			sb.append(c);
+		System.out.println(sb.toString());
+		return sb.toString();
+	}
+	
+}

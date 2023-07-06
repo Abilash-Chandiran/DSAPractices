@@ -1,4 +1,4 @@
-package main.java.selenium;
+package main.java.seleniumpractice;
 
 import static org.junit.Assert.assertEquals;
 

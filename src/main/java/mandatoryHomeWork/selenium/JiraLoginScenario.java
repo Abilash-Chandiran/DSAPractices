@@ -1,4 +1,4 @@
-package main.java.selenium;
+package main.java.mandatoryHomeWork.selenium;
 
 import static org.junit.Assert.assertEquals;
 

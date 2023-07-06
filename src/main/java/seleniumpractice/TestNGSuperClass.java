@@ -1,4 +1,4 @@
-package main.java.selenium;
+package main.java.seleniumpractice;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
