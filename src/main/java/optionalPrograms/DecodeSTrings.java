@@ -43,17 +43,14 @@ public class DecodeSTrings {
 	 */
 	private String decodeString(String s) {
 		Stack<Character> stack = new Stack<>();//2[abc3[ab]]
-		System.out.println("Input : 2[abc3[ab]]");
 		for (int i = 0; i < s.length(); i++) {
 			if (s.charAt(i) != ']') {
 				stack.push(s.charAt(i));
-				System.out.println("Stack in 1st if condition : "+stack.toString());
 			}
 			else {
 				List<Character> list = new ArrayList<>();
 				while (stack.peek() != '[') {
 					list.add(stack.pop());
-					System.out.println("list in 1st while : "+list);
 				}
 				stack.pop();
 				int times = 1;
@@ -63,12 +60,10 @@ public class DecodeSTrings {
 						valueOfK.insert(0, stack.pop());
 					}
 					times = Integer.valueOf(valueOfK.toString());
-					System.out.println("times : "+times);
 				}
 				while (times > 0) {
 					for (int j = list.size() - 1; j >= 0; j--) {
 						stack.push(list.get(j));
-						System.out.println("Stack in 2nd for loop: "+stack.toString());
 					}
 					times--;
 				}
@@ -77,8 +72,6 @@ public class DecodeSTrings {
 		StringBuilder sb = new StringBuilder();
 		for (Character c : stack)
 			sb.append(c);
-		System.out.println(sb.toString());
 		return sb.toString();
 	}
-	
 }
