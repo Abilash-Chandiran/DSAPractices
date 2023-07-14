@@ -1,16 +1,15 @@
 package main.java.mandatoryHomeWork.week6.day4;
 
-import static org.junit.Assert.assertEquals;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 public class FlippingImage {
 
 	@Test
-	public void test1() {
+	public void test() {
 		int[][] mat = { { 1, 1, 0 }, { 1, 0, 1 }, { 0, 0, 0 } };
 		int[][] output = { { 1, 0, 0 }, { 0, 1, 0 }, { 1, 1, 1 } };
-		assertEquals(output, flipAndInvertImage(mat));
+		Assert.assertArrayEquals(output, flipAndInvertImage(mat));	
 	}
 
 	public int[][] flipAndInvertImage(int[][] image) {

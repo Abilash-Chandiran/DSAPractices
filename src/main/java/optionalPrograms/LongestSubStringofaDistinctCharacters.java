@@ -1,5 +1,7 @@
 package main.java.optionalPrograms;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,5 +28,24 @@ public class LongestSubStringofaDistinctCharacters {
 				output = str.substring(i, j);
 		}
 		return output;
+	}
+	
+	private static int findSubString(String s, int k) {
+		if (s.trim().length() == 0)
+			return 0;
+		if (s.trim().length() < k)
+			return s.length();
+		int left = 0, right = 0, max = 1;
+		HashMap<Integer, Integer> map = new HashMap<>();
+		while (right < s.length()) {
+			map.put((int) s.charAt(right), right++);
+			if (map.size() > k) {
+				Integer minIndex = Collections.min(map.values());
+				map.remove((int) s.charAt(minIndex));
+				left = minIndex + 1;
+			}
+			max = Math.max(max, right - left);
+		}
+		return max;
 	}
 }
