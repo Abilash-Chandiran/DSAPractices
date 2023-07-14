@@ -45,13 +45,7 @@ public class OrangeHRM {
 		driver.findElement(By.xpath("//span[text()='Time']")).click();
 		driver.findElement(By.xpath("//span[text()='Attendance ']")).click();
 		
-		
-		
-		
-		
-		
-		
-		
+
 		driver.quit();
 	}
 

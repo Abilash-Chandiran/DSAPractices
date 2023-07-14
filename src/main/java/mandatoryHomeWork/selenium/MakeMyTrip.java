@@ -1,130 +1,121 @@
 package main.java.mandatoryHomeWork.selenium;
 
-import static org.junit.Assert.assertTrue;
-
+import java.awt.AWTException;
 import java.time.Duration;
-
+import java.util.ArrayList;
+import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
+/*
+Selenium scenario - 10
+MakeMyTrip – Search Flight
+1. Launch the web browser.
+2. Navigate to "https://www.makemytrip.com" (replace with the actual URL of the MakeMyTrip flight booking website).
+3. Click on the "Flights" tab.
+4. Enter the departure city in the "From" field.
+5. Enter the arrival city in the "To" field.
+6. Select the departure date from the calendar.
+7. Select the return date from the calendar (if applicable).
+8. Select the number of passengers (adults, children, infants) from the dropdown menus.
+9. Click on the "Search" button.
+10. Wait for the search results page to load.
+11. Verify that the search results are displayed correctly with available flights.
+12. Select a specific flight from the search results.
+13. Verify that the flight details page is displayed.
+14. Enter passenger details (names, contact information, etc.) in the provided form.
+15. Click on the "Continue Booking" button to proceed with the booking.
+*/
 public class MakeMyTrip {
+	// ChangedCredentials for GIT
 
-	public static void main(String[] args) throws InterruptedException {
+	String URL = "https://www.makemytrip.com";
 
-		// 1. Launch the web browser
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--disable-notifications");
-		options.addArguments("--disable-popup-blocking");
-		WebDriver driver = new ChromeDriver(options);
+	ChromeDriver driver;
 
-		// 2. Navigate to "https://www.makemytrip.com" (replace with the actual URL of
-		// the MakeMyTrip flight booking website).
-		driver.get("https://www.makemytrip.com");
+	@Test
+	public void createAssignee() throws InterruptedException, AWTException {
+
+		// 4.9.1
+		WebDriverManager.chromedriver().setup();
+		driver = new ChromeDriver();
+
+//		1. Launch the web browser.
+
+		driver.get(URL);
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-		driver.navigate().to("https://www.makemytrip.com/flights/");
-		JavascriptExecutor j = (JavascriptExecutor) driver;
-		j.executeScript("return document.readyState").toString().equals("complete");
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+//		2. Navigate to "https://www.makemytrip.com" (replace with the actual URL of the MakeMyTrip flight booking website).
+		driver.navigate().to(URL);
+//		3. Click on the "Flights" tab.
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement flight = driver.findElement(By.xpath("//a[contains(@href, 'https://www.makemytrip.com/flights/')]"));
+		wait.until(ExpectedConditions.elementToBeClickable(flight)).click();
+//		4. Enter the departure city in the "From" field.
+		WebElement fromcity = driver.findElement(By.xpath("//input[@id='fromCity']"));
+		fromcity.click();
+		Thread.sleep(1000);
+		driver.findElement(By.xpath("//div[contains(@class, 'autoSuggest')]//li[contains(., 'BLR')]")).click();
+//		5. Enter the arrival city in the "To" field.
+		WebElement toCity = driver.findElement(By.xpath("//input[@id='toCity']"));
+		toCity.click();
+		Thread.sleep(1000);
+		driver.findElement(By.xpath("//label[@for='toCity']/following-sibling::div//li[contains(., 'MAA')]")).click();
 
-		// 3. Click on the "Flights" tab.
-		driver.findElement(By.xpath("(//span[text()=\"Flights\"]/parent::a)[1]")).click();
+//		6.Select the departure date from the calendar.
+		WebElement date = driver.findElement(By.xpath(
+				"//div[contains(@class, 'DayPicker-Week') and @role='row']/following::div[@aria-label='Sun Jul 16 2023']"));
+		date.click();
+		Thread.sleep(3000);
+
+//		7. Select the return date from the calendar (if applicable).
+//		8. Select the number of passengers (adults, children, infants) from the dropdown menus.
+		driver.findElement(By.xpath("//div[contains(@class, 'flightTravllers ')]")).click();
+		Thread.sleep(1000);
+		driver.findElement(By.xpath("//ul[contains(@class, 'guestCounter')]//li[contains(@data-cy, 'adults-2')]"))
+				.click();
+
+		driver.findElement(By.xpath("//button[@type='button' and text()='APPLY']")).click();
+		Thread.sleep(1000);
+//		9. Click on the "Search" button.
+		driver.findElement(By.xpath("//a[contains(@class, 'SearchBtn') and text()='Search']")).click();
 		Thread.sleep(5000);
-
-		// 4. Enter the departure city in the "From" field.
-		driver.findElement(By.xpath("//span[text()='From']")).click();
-		driver.findElement(By.xpath("//input[@placeholder='From']")).sendKeys("Chennai, India");
-		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@role='listbox']/div/ul/li"),
-				"Chennai, India"));
-		driver.findElement(By.xpath("//div[@role='listbox']/div/ul/li")).click();
-
-		// 5. Enter the arrival city in the "To" field.
-		driver.findElement(By.xpath("//span[text()='To']")).click();
-		driver.findElement(By.xpath("//input[@placeholder='To']")).sendKeys("Bengaluru, India");
-		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@role='listbox']/div/ul/li"),
-				"Bengaluru, India"));
-		driver.findElement(By.xpath("//div[@role='listbox']/div/ul/li")).click();
-
-		// 6. Select the departure date from the calendar.
-		driver.findElement(By.xpath("//span[text()='Departure']")).click();
-		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(((//div[@class='DayPicker-Week'])[3])/div)[1]")));
-		driver.findElement(By.xpath("(((//div[@class='DayPicker-Week'])[2])/div)[1]")).click();
-
-		// 7. Select the return date from the calendar (if applicable).
-
-		// 8. Select the number of passengers (adults, children, infants) from the
-		// dropdown menus.
-		driver.findElement(By.xpath("//span[text()='Travellers & Class']")).click();
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='travellers gbTravellers']")));
-		driver.findElement(By.xpath("(//div[@class='travellers gbTravellers']/div/ul/li)[2]")).click();
-		driver.findElement(By.xpath("//button[text()='APPLY']")).click();
-
-		// 9. Click on the "Search" button.
-		driver.findElement(By.xpath("//a[text()='Search']")).click();
-
-		// 10.Wait for the search results page to load.
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='flightBody']")));
-		if (driver.findElement(By.xpath("//div[@class='commonOverlay ']")).isDisplayed())
-			driver.findElement(By.xpath("//div[@class='commonOverlay ']/span")).click();
-
-		// 11.Verify that the search results are displayed correctly with available
-		// flights.
-
-		// 12.Select a specific flight from the search results.
+//		10. Wait for the search results page to load.
+		WebElement popup = driver.findElement(By.xpath("//div[@class='commonOverlay ']"));
+		if (popup.isDisplayed()) {
+			WebElement clickOk = driver
+					.findElement(By.xpath("//button[contains(@class, 'Secondry') and  text()='OKAY, GOT IT!']"));
+			wait.until(ExpectedConditions.elementToBeClickable(clickOk)).click();
+		}
+//		11. Verify that the search results are displayed correctly with available flights.
+		String header = driver.findElement(By.xpath("//div[@class='listingRhs']/p[contains(.,'Flights')]")).getText();
+		System.out.println("Flights from search reulsts are " + header);
+//		12. Select a specific flight from the search results.
+		driver.findElement(By.xpath("(//span[text()='View Prices']/parent::button)[1]")).click();
+		Thread.sleep(1000);
+		driver.findElement(By.xpath("(//button[contains(text(), 'Book Now')])[1]")).click();
 		Thread.sleep(3000);
-		WebElement element = driver.findElement(By.xpath("(//div[@class='makeFlex spaceBetween'])[2]"));
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		js.executeScript("arguments[0].scrollIntoView();", element);
-		Actions action = new Actions(driver);
-		action.moveToElement(element).perform();
-		Thread.sleep(3000);
-		WebElement viewFlight = driver.findElement(By.xpath("(//span[text()='View Flight Details'])[8]"));
-		wait.until(ExpectedConditions.elementToBeClickable(viewFlight));
-		viewFlight.click();
+//		13. Verify that the flight details page is displayed.
+		ArrayList<String> newTb = new ArrayList<String>(driver.getWindowHandles());
+		// switch to new tab
+		driver.switchTo().window(newTb.get(1));
+		System.out.println(driver.getTitle());
+		WebElement flightPage = driver.findElement(By.xpath("//h2[text()='Complete your booking']"));
+		wait.until(ExpectedConditions.visibilityOf(flightPage));
 
-		// 13.Verify that the flight details page is displayed.
-		boolean flightDetails = driver.findElement(By.xpath("//div[@class='flightDetailsOuter']")).isDisplayed();
-		assertTrue(flightDetails);
-		Thread.sleep(3000);
-		driver.findElement(By.xpath("(//span[text()=\"Hide Flight Details\"])")).click();
-
-		// 14.Enter passenger details (names, contact information, etc.) in the provided
-		// form.
-		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//div[@class = 'priceSection']/div/button)[1]")));
-		driver.findElement(By.xpath("(//div[@class = 'priceSection']/div/button)[1]")).click();
-		wait.until(
-				ExpectedConditions.elementToBeClickable(By.xpath("(//span[text()='View Prices']/parent::button)[1]")));
-		driver.findElement(By.xpath("(//button[text()='Book Now'])[1]")).click();
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("wrapper_ADULT")));
-		driver.findElement(By.xpath("(//label[@class='radioboxContainer ']/span/input)[2]")).click();
-		driver.findElement(By.xpath("(//button[@class='addTravellerBtn'])[1]")).click();
-		// Adult-1
-		driver.findElement(By.xpath("//input[@placeholder='First & Middle Name']")).sendKeys("VigneshKumar");
-		driver.findElement(By.xpath("//input[@placeholder='Last Name']")).sendKeys("Tamilselvan");
-		driver.findElement(By.xpath("//input[(@type='radio' and @value='MALE')]")).click();
-		driver.findElement(By.xpath("(//button[@class='addTravellerBtn'])[1]")).click();
-		// Adult-2
-		driver.findElement(By.xpath("//input[@placeholder='First & Middle Name']")).sendKeys("VinothKumar");
-		driver.findElement(By.xpath("//input[@placeholder='Last Name']")).sendKeys("Tamilselvan");
-		driver.findElement(By.xpath("//input[(@type='radio' and @value='MALE')]")).click();
-		// Contact details
-		driver.findElement(By.xpath("//input[@placeholder='Mobile No']")).sendKeys("9489865827");
-		driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("vigneshkumartamilselvan@gmail.com");
-		driver.findElement(By.xpath("//input[(@type='radio' and @value='MALE')]")).click();
-		// Terms and condition
-		driver.findElement(By.xpath("//span[@class='checkboxWpr']/input")).click();
-
-		// 15.Click on the "Continue Booking" button to proceed with the booking.
+//		14. Enter passenger details (names, contact information, etc.) in the provided form.
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,250)", "");
+		WebElement mobile = driver.findElement(By.xpath("//input[@placeholder='Mobile No']"));
+		mobile.sendKeys("46464654656");
+//		15. Click on the "Continue Booking" button to proceed with the booking.
 		driver.findElement(By.xpath("//button[text()='Continue']")).click();
+		driver.quit();
 	}
 
 }

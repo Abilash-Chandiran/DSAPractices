@@ -63,8 +63,9 @@ public class AmazonOnePlus {
 				// 6. Take a screen shot of the product displayed
 				TakesScreenshot scrShot = ((TakesScreenshot) driver);
 				File SrcFile = scrShot.getScreenshotAs(OutputType.FILE);
-				File DestFile = new File("./resources/screenshots/");
+				File DestFile = new File("./screenshots/onePlus9.png");
 				FileUtils.copyFile(SrcFile, DestFile);
+				System.out.println(DestFile);
 
 				// 7. Click 'Add to Cart' button
 				driver.findElement(By.id("add-to-cart-button")).click();
