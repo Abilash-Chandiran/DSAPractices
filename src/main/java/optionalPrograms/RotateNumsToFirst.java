@@ -7,6 +7,11 @@ public class RotateNumsToFirst {
 	 * 
 	 */
 
+	/**
+	 * 1) Rotate an array to right for k times Input=[1,2,3,4,5] k=3
+	 * Output=[3,4,5,1,2]
+	 */
+
 	public static void main(String[] args) {
 		int num = 12345;
 		int k = 3;
@@ -15,7 +20,7 @@ public class RotateNumsToFirst {
 
 	public static void rotateNumstoFirst(int num, int k) {
 
-		int len = (int) (Math.log10(num)+1); // To find int len of the integer
+		int len = (int) (Math.log10(num) + 1); // To find int len of the integer
 		System.out.println(len);
 
 		while (k-- > 0) {
